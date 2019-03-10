@@ -4,8 +4,8 @@
         "node": true
     },
     "extends": [
-        "plugin:prettier/recommended"
-      ],
+        "standard"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
