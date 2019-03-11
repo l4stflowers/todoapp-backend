@@ -17,3 +17,5 @@ functions:
 
 plugins:
   - serverless-aws-documentation
+  - serverless-reqvalidator-plugin
+
