@@ -1,14 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "",
     "version": "1.0.0",
     "title": "Todoapp API"
   },
   "tags": [
     {
       "name": "todo",
-      "description": "Interfaces for todos"
+      "description": "Api for todo"
     }
   ],
   "paths": {
@@ -18,7 +17,6 @@
           "todo"
         ],
         "summary": "Get all todos for the specified user",
-        "description": "Return an array of Todo model",
         "parameters": [
           {
             "in": "path",
@@ -26,6 +24,13 @@
             "required": true,
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "schema": {
+              "$ref": "#/components/schemas/TodoStates"
             }
           }
         ],
@@ -42,6 +47,16 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
@@ -50,7 +65,6 @@
           "todo"
         ],
         "summary": "Create new todo for the specified user",
-        "description": "",
         "parameters": [
           {
             "in": "path",
@@ -91,10 +105,14 @@
             }
           },
           "400": {
-            "description": "Bad Request"
-          },
-          "409": {
-            "description": "Conflict"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -105,7 +123,6 @@
           "todo"
         ],
         "summary": "Update the todo for the specified user",
-        "description": "",
         "parameters": [
           {
             "in": "path",
@@ -135,14 +152,28 @@
           "description": "The todo to update"
         },
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "No OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Todo"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
-          "409": {
-            "description": "Conflict"
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -174,8 +205,8 @@
           "204": {
             "description": "No Content"
           },
-          "409": {
-            "description": "Conflict"
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -190,46 +221,86 @@
     }
   ],
   "components": {
+    "responses": {
+      "BadRequest": {
+        "description": "Some request values are invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
       "Todo": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
           "title": {
             "type": "string"
           },
           "memo": {
             "type": "string"
           },
-          "due_date": {
+          "due-date": {
             "type": "string",
             "format": "date"
+          },
+          "repeat": {
+            "$ref": "#/components/schemas/TodoRepeatTypes"
           },
           "reminds": {
             "type": "array",
             "items": {
               "type": "string",
-              "format": "date-time",
-              "default": []
+              "format": "date-time"
             }
           },
-          "repeat": {
-            "type": "string",
-            "enum": [
-              "none",
-              "hour",
-              "day",
-              "month",
-              "year"
-            ],
-            "default": "none"
-          },
-          "done": {
-            "type": "boolean",
-            "default": false
+          "state": {
+            "$ref": "#/components/schemas/TodoStates"
           }
         },
         "required": [
+          "id",
           "title"
+        ]
+      },
+      "TodoRepeatTypes": {
+        "type": "string",
+        "enum": [
+          "none",
+          "day",
+          "month",
+          "year"
+        ],
+        "description": "must be 'none' when due-date is emprty"
+      },
+      "TodoStates": {
+        "type": "string",
+        "enum": [
+          "created",
+          "done",
+          "deleted"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
         ]
       }
     }
