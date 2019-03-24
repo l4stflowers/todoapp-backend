@@ -16,7 +16,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "serverless-http": "^1.9.1",
-    "uuid": "^3.3.2"
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^5.15.1",

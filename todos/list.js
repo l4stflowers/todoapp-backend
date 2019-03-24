@@ -1,8 +1,31 @@
 'use strict'
 
-module.exports.create = (event, context, callback) => {
-  const response = {
-    statusCode: 200
+const AWS = require('aws-sdk')
+const dynamoDb = new AWS.DynamoDB.DocumentClient()
+
+module.exports.list = (event, context, callback) => {
+  const params = {
+    TableName: process.env.TODO_TABLE,
+    ExpressionAttributeNames: { '#userId': 'userId' },
+    ExpressionAttributeValues: { ':val': event.pathParameters.userId },
+    KeyConditionExpression: '#userId = :val'
   }
-  callback(null, response)
+
+  dynamoDb.query(params, (error, result) => {
+    if (error) {
+      console.error(error)
+      callback(null, {
+        statusCode: 501,
+        headers: { 'Content-Type': 'text/plain' },
+        body: 'Couldn\'t fetch the todos.'
+      })
+      return
+    }
+
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(result.Items)
+    }
+    callback(null, response)
+  })
 }

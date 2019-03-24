@@ -1,7 +1,7 @@
 'use strict'
 
 const AWS = require('aws-sdk')
-const uuid = require('uuid/v1')
+const ULID = require('ulid')
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
 module.exports.create = (event, context, callback) => {
@@ -11,7 +11,7 @@ module.exports.create = (event, context, callback) => {
     TableName: process.env.TODO_TABLE,
     Item: {
       userId: event.pathParameters.userId,
-      id: uuid(),
+      id: ULID.ulid(),
       title: body.title,
       memo: body.memo,
       due_date: body.due_date,
