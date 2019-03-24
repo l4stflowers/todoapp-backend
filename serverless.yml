@@ -22,14 +22,25 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["TodoTable", "Arn" ] }
   environment:
-    USERS_TABLE: ${self:custom.tableName}
+    TODO_TABLE: ${self:custom.tableName}
 
 functions:
-  app:
-    handler: index.handler
+  create:
+    handler: todos/create.create
     events:
-      - http: ANY /
-      - http: "ANY {proxy+}"
+      - http: 'POST /users/{userId}/todos'
+  list:
+    handler: todos/list.list
+    events:
+      - http: 'GET /users/{userId}/todos'
+  update:
+    handler: todos/update.update
+    events:
+      - http: 'PUT /users/{userId}/todos/{id}'
+  delete:
+    handler: todos/delete.delete
+    events:
+      - http: 'DELETE /users/{userId}/todos/{id}'
 
 resources:
   Resources:
@@ -49,7 +60,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.tableName}
+        TableName: ${self:provider.environment.TODO_TABLE}
 
 plugins:
   - serverless-aws-documentation
