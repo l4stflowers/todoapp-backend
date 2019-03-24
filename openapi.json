@@ -23,7 +23,7 @@
             "name": "userId",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -71,7 +71,7 @@
             "name": "userId",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -117,7 +117,7 @@
         }
       }
     },
-    "/users/{userId}/todos/{todoId}": {
+    "/users/{userId}/todos/{id}": {
       "put": {
         "tags": [
           "todo"
@@ -129,15 +129,15 @@
             "name": "userId",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
             "in": "path",
-            "name": "todoId",
+            "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -153,7 +153,7 @@
         },
         "responses": {
           "200": {
-            "description": "No Content",
+            "description": "No OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -189,15 +189,15 @@
             "name": "userId",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
             "in": "path",
-            "name": "todoId",
+            "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -238,7 +238,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
+            "type": "string",
             "readOnly": true
           },
           "title": {
@@ -247,7 +247,7 @@
           "memo": {
             "type": "string"
           },
-          "due-date": {
+          "due_date": {
             "type": "string",
             "format": "date"
           },
