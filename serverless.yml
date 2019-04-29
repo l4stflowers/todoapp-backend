@@ -7,6 +7,15 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+    - apiKey-${self:provider.stage}
+  usagePlan:
+    quota:
+      limit: 5000
+      period: MONTH
+    throttle:
+      burstLimit: 200
+      rateLimit: 100
   runtime: nodejs8.10
   stage: dev
   region: ap-northeast-1
@@ -28,19 +37,31 @@ functions:
   create:
     handler: todos/create.create
     events:
-      - http: 'POST /users/{userId}/todos'
+      - http:
+          path: users/{userId}/todos
+          method: post
+          private: true
   list:
     handler: todos/list.list
     events:
-      - http: 'GET /users/{userId}/todos'
+      - http:
+          path: users/{userId}/todos
+          method: get
+          private: true
   update:
     handler: todos/update.update
     events:
-      - http: 'PUT /users/{userId}/todos/{id}'
+      - http:
+          path: users/{userId}/todos/{id}
+          method: put
+          private: true
   delete:
     handler: todos/delete.delete
     events:
-      - http: 'DELETE /users/{userId}/todos/{id}'
+      - http:
+          path: users/{userId}/todos/{id}
+          method: delete
+          private: true
 
 resources:
   Resources:
