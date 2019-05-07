@@ -62,6 +62,13 @@ functions:
           path: users/{userId}/todos/{id}
           method: delete
           private: true
+  get:
+    handler: todos/get.get
+    events:
+      - http:
+          path: users/{userId}/todos/{id}
+          method: get
+          private: true
 
 resources:
   Resources:
