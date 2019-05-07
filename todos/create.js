@@ -7,6 +7,8 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient()
 module.exports.create = (event, context, callback) => {
   const body = JSON.parse(event.body)
 
+  // TODO Add validations.
+
   const params = {
     TableName: process.env.TODO_TABLE,
     Item: {
