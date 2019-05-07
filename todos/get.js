@@ -20,6 +20,7 @@ module.exports.get = (event, context, callback) => {
   dynamoDb.query(params, (error, result) => {
     if (error) {
       console.error(error)
+      // TODO Response 'error' schema json
       callback(null, {
         statusCode: 501,
         headers: { 'Content-Type': 'text/plain' },
