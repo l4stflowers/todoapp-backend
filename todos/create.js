@@ -26,6 +26,7 @@ module.exports.create = (event, context, callback) => {
   dynamoDb.put(params, (error) => {
     if (error) {
       console.error(error)
+      // TODO Response 'error' schema json
       callback(null, {
         sstatusCode: error.statusCode,
         headers: { 'content-type': 'text/plain' },

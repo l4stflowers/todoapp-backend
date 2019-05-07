@@ -31,6 +31,7 @@ module.exports.update = (event, context, callback) => {
     if (error) {
       console.error(error)
       // TODO Add 404 error handling.
+      // TODO Response 'error' schema json
       callback(null, {
         statusCode: error.statusCode || 501,
         headers: { 'Content-Type': 'text/plain' },
