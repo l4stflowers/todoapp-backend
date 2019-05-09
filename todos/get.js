@@ -6,18 +6,13 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient()
 module.exports.get = (event, context, callback) => {
   const params = {
     TableName: process.env.TODO_TABLE,
-    ExpressionAttributeNames: {
-      '#userId': 'userId',
-      '#id': 'id'
-    },
-    ExpressionAttributeValues: {
-      ':userIdVal': event.pathParameters.userId,
-      ':idVal': event.pathParameters.id
-    },
-    KeyConditionExpression: '#userId = :userIdVal AND #id = :idVal'
+    Key: {
+      userId: event.pathParameters.userId,
+      id: event.pathParameters.id
+    }
   }
 
-  dynamoDb.query(params, (error, result) => {
+  dynamoDb.get(params, (error, result) => {
     if (error) {
       console.error(error)
       // TODO Response 'error' schema json
@@ -31,7 +26,7 @@ module.exports.get = (event, context, callback) => {
 
     const response = {
       statusCode: 200,
-      body: JSON.stringify(result.Items)
+      body: JSON.stringify(result.Item)
     }
     callback(null, response)
   })
