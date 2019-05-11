@@ -2,7 +2,9 @@
 
 const AWS = require('aws-sdk')
 const ULID = require('ulid')
-const dynamoDb = new AWS.DynamoDB.DocumentClient()
+const dynamoDb = new AWS.DynamoDB.DocumentClient({
+  convertEmptyValues: true
+})
 
 module.exports.create = (event, context, callback) => {
   const body = JSON.parse(event.body)

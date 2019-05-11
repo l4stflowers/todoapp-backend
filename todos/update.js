@@ -1,7 +1,9 @@
 'use strict'
 
 const AWS = require('aws-sdk')
-const dynamoDb = new AWS.DynamoDB.DocumentClient()
+const dynamoDb = new AWS.DynamoDB.DocumentClient({
+  convertEmptyValues: true
+})
 
 module.exports.update = (event, context, callback) => {
   const body = JSON.parse(event.body)
@@ -11,20 +13,23 @@ module.exports.update = (event, context, callback) => {
   const params = {
     TableName: process.env.TODO_TABLE,
     ExpressionAttributeNames: {
-      '#title': 'title',
-      '#memo': 'memo',
+      '#repeat': 'repeat',
       '#state': 'state'
     },
     ExpressionAttributeValues: {
       ':titleVal': body.title,
       ':memoVal': body.memo,
+      ':dueDateVal': body.due_date,
+      ':repeatVal': body.repeat,
+      ':remindsVal': body.reminds,
       ':stateVal': body.state
     },
     Key: {
       userId: event.pathParameters.userId,
       id: event.pathParameters.id
     },
-    UpdateExpression: 'SET #title = :titleVal, #memo = :memoVal, #state = :stateVal'
+    UpdateExpression: `SET title = :titleVal, memo = :memoVal, due_date = :dueDateVal, 
+                           #repeat = :repeatVal, reminds = :remindsVal, #state = :stateVal`
   }
 
   dynamoDb.update(params, (error, result) => {
