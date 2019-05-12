@@ -4,11 +4,26 @@ const AWS = require('aws-sdk')
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
 module.exports.list = (event, context, callback) => {
+  var expressinAttributeNames = {}
+  expressinAttributeNames['#userId'] = 'userId'
+
+  var expressionAttributeValues = {}
+  expressionAttributeValues[':userIdVal'] = event.pathParameters.userId
+
+  var filterExpression
+
+  if (event.queryStringParameters != null && event.queryStringParameters.state != null) {
+    expressinAttributeNames['#state'] = 'state'
+    expressionAttributeValues[':stateVal'] = event.queryStringParameters.state
+    filterExpression = '#state = :stateVal'
+  }
+
   const params = {
     TableName: process.env.TODO_TABLE,
-    ExpressionAttributeNames: { '#userId': 'userId' },
-    ExpressionAttributeValues: { ':val': event.pathParameters.userId },
-    KeyConditionExpression: '#userId = :val'
+    ExpressionAttributeNames: expressinAttributeNames,
+    ExpressionAttributeValues: expressionAttributeValues,
+    KeyConditionExpression: '#userId = :userIdVal',
+    FilterExpression: filterExpression
   }
 
   dynamoDb.query(params, (error, result) => {
